@@ -79,7 +79,7 @@ public class ApiAuthenticationBean {
     }
 
     public Long parseJWT(String jwt) {
-        if (StringUtils.isBlank(jwt)) return null;
+        if (StringUtils.isBlank(jwt) || "undefined".equals(jwt)) return null;
         try {
             Jws<Claims> jws = Jwts.parserBuilder().setSigningKey(jwtKey).build().parseClaimsJws(jwt.trim());
             String claimedUserId = jws.getBody().get(jwtUserIdClaim, String.class);
