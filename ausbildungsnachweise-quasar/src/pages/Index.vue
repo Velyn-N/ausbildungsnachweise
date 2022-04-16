@@ -2,7 +2,7 @@
   <q-page class="flex flex-center q-pa-sm">
     <div class="fit row wrap justify-center items-center content-center text-center">
 
-      <DailyActivities />
+      <ActivityCards />
 
       <q-card :class="($q.platform.is.mobile) ? 'col-12' : 'col-5'" class="q-ma-sm">
         <q-card-section>
@@ -17,5 +17,5 @@
 </template>
 
 <script setup>
-import DailyActivities from "components/index/DailyActivities.vue";
+import ActivityCards from "components/index/ActivityCards.vue";
 </script>

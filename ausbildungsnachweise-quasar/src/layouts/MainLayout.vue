@@ -85,6 +85,7 @@ function login() {
     if (resp.data !== undefined && resp.data.length > 0) {
       apiUserStore.reloadApiUser(resp.data)
       $q.notify("Du wurdest eingeloggt.")
+      setTimeout(() => location.reload(), 1000)
     }
   }).catch((err) => {
     $q.notify("Es ist ein Fehler beim einloggen aufgetreten: " + err)
