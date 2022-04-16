@@ -4,24 +4,26 @@ import com.google.gson.*;
 import lombok.Getter;
 
 import javax.enterprise.context.ApplicationScoped;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 @ApplicationScoped
 public class CustomGson {
+    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
     @Getter
     private Gson gson;
 
     public CustomGson() {
         gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class,
-                        (JsonDeserializer<LocalDateTime>) (json, typeOfT, context) ->
-                                ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString())
-                                        .toLocalDateTime())
-                .registerTypeAdapter(LocalDateTime.class,
-                        (JsonSerializer<LocalDateTime>) (src, typeOfSrc, context) ->
-                                new JsonPrimitive(src.format(DateTimeFormatter.ISO_DATE_TIME)))
+                .registerTypeAdapter(LocalDate.class,
+                        (JsonDeserializer<LocalDate>) (json, typeOfT, context) ->
+                                LocalDate.parse(json.getAsJsonPrimitive().getAsString(), dateFormatter))
+                .registerTypeAdapter(LocalDate.class,
+                        (JsonSerializer<LocalDate>) (src, typeOfSrc, context) ->
+                                new JsonPrimitive(src.format(dateFormatter)))
                 .setPrettyPrinting()
                 .create();
     }

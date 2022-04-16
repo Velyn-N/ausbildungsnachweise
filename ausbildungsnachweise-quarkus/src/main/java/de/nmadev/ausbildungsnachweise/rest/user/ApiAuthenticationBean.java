@@ -21,6 +21,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -39,7 +40,7 @@ public class ApiAuthenticationBean {
     private Supplier<User> defaultUserSupplier;
 
     @PostConstruct
-    private void init() {
+    void init() {
         defaultUserSupplier = Suppliers.memoizeWithExpiration(User::new, 12, TimeUnit.HOURS);
 
         jwtUserCache = CacheBuilder.newBuilder()
@@ -53,7 +54,11 @@ public class ApiAuthenticationBean {
     }
 
     public User getUser(String jwt) {
-        return (jwt != null) ? jwtUserCache.getUnchecked(jwt) : defaultUserSupplier.get();
+        try {
+            return (jwt != null) ? jwtUserCache.get(jwt) : defaultUserSupplier.get();
+        } catch (Exception e) {
+            return defaultUserSupplier.get();
+        }
     }
 
     /**

@@ -12,8 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @ApplicationScoped @Startup
@@ -26,6 +25,9 @@ public class JsonStorageFileManager {
 
     Map<DataFile, File> dataFileFileMap = new HashMap<>();
 
+    /**
+     * Loads all Files into Cache and checks for Read & Write Permissions
+     */
     @PostConstruct
     public void preloadFiles() {
         for (DataFile df : DataFile.values()) {
@@ -58,9 +60,10 @@ public class JsonStorageFileManager {
      * @param <T> the Data's Type
      * @return parsed File contents
      */
-    public <T> T loadDataFromFile(DataFile target, Class<T> clazz) {
+    public <T> List<T> loadDataListFromFile(DataFile target, Class<T[]> clazz) {
         String fileContent = readFile(dataFileFileMap.get(target));
-        return gson.fromJson(fileContent, clazz);
+        T[] arr = gson.fromJson(fileContent, clazz);
+        return (arr != null) ? Arrays.asList(arr) : new ArrayList<>();
     }
 
     /**

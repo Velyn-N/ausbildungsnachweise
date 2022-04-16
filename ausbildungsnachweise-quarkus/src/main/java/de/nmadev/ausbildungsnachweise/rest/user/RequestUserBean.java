@@ -28,9 +28,13 @@ public class RequestUserBean {
     private User user;
 
     @PostConstruct
-    private void init() {
+    void init() {
         String jwtHeader = request.getHeader("Authentication");
         user = apiAuthBean.getUser((StringUtils.isNotBlank(jwtHeader)) ? jwtHeader : "");
+    }
+
+    public Long getUserId() {
+        return (user != null) ? user.getId() : null;
     }
 
     /**

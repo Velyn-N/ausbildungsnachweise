@@ -3,39 +3,24 @@ package de.nmadev.ausbildungsnachweise.dao;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import de.nmadev.ausbildungsnachweise.JsonStorageFileManager;
 import de.nmadev.ausbildungsnachweise.entity.User;
-import de.nmadev.ausbildungsnachweise.entity.lists.UserList;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
-public class UserDao {
+public class UserDao extends FileDao<User> {
 
-    @Inject
-    JsonStorageFileManager jsonStorage;
-
-    public UserList getAusbilderUsers() {
-        return new UserList(getUserListFromFile()
-                .stream()
-                .filter(User::isAusbilder)
-                .toList());
+    public List<User> getAusbilderUsers() {
+        return super.getEntitiesMatching(User::isAusbilder);
     }
 
     public Optional<User> getUser(Long userId) {
-        return (userId == null) ? Optional.empty() : getUserListFromFile()
-                .stream()
-                .filter(user -> userId.equals(user.getId()))
-                .findAny();
-    }
-
-    public boolean userExists(Long userId) {
-        return getUser(userId).isPresent();
+        return super.getById(userId);
     }
 
     public Optional<User> loginUser(String email, String password) {
-        List<User> users = getUserListFromFile().stream().filter(user -> email.equals(user.getEmail())).toList();
+        List<User> users = super.getEntitiesMatching(user -> email.equals(user.getEmail()));
         for (User user : users) {
             boolean passwordCorrect = checkPassword(password, user.getPassword());
             if (passwordCorrect && !user.isLocked()) {
@@ -45,10 +30,6 @@ public class UserDao {
         return Optional.empty();
     }
 
-    private UserList getUserListFromFile() {
-        return jsonStorage.loadDataFromFile(JsonStorageFileManager.DataFile.USERS, UserList.class);
-    }
-
     public static String hashPassword(String rawPassword) {
         return BCrypt.withDefaults().hashToString(14, rawPassword.toCharArray());
     }
@@ -56,5 +37,15 @@ public class UserDao {
     public static boolean checkPassword(String rawPassword, String hashedPassword) {
         BCrypt.Result result = BCrypt.verifyer().verify(rawPassword.toCharArray(), hashedPassword.toCharArray());
         return result.verified;
+    }
+
+    @Override
+    protected JsonStorageFileManager.DataFile getDataFile() {
+        return JsonStorageFileManager.DataFile.USERS;
+    }
+
+    @Override
+    protected Class<User[]> getArrayType() {
+        return User[].class;
     }
 }

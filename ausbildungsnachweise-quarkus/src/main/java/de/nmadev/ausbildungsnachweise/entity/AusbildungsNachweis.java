@@ -2,12 +2,13 @@ package de.nmadev.ausbildungsnachweise.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter @Setter
-public class AusbildungsNachweis implements Serializable {
+public class AusbildungsNachweis implements Serializable, JsonEntity {
 
     private Long id;
 
@@ -15,14 +16,24 @@ public class AusbildungsNachweis implements Serializable {
     private String abteilung;
     private boolean daily;
 
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     private Long azubiId;
     private boolean signedByAzubi;
-    private LocalDateTime azubiSignDate;
+    private LocalDate azubiSignDate;
 
     private Long ausbilderId;
     private boolean signedByAusbilder;
-    private LocalDateTime ausbilderSignDate;
+    private LocalDate ausbilderSignDate;
+
+    @Override
+    public boolean isValid() {
+        return ausbildungsjahr > 0
+                && StringUtils.isNotBlank(abteilung)
+                && startDate != null
+                && endDate != null
+                && azubiId != null
+                && ausbilderId != null;
+    }
 }
