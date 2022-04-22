@@ -35,4 +35,4 @@ jobs:
       - name: Build Quarkus
         run: |
           cd ausbildungsnachweise-quarkus
-          ./mvnw package -Dquarkus.package.type=uber-jar
+          sudo bash mvnw package -Dquarkus.package.type=uber-jar
