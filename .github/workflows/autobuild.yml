@@ -27,7 +27,7 @@ jobs:
 
       - name: Move Quasar Build
         run: |
-          mkdir -p ../ausbildungsnachweise-quarkus/src/main/resources/META-INF/resources
+          mkdir -p ausbildungsnachweise-quarkus/src/main/resources/META-INF/resources
           pwd
           cp -r ausbildungsnachweise-quasar/dist/spa/* ausbildungsnachweise-quarkus/src/main/resources/META-INF/resources
           cd ausbildungsnachweise-quarkus
