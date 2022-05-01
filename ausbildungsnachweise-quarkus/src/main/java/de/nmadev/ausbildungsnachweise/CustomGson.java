@@ -5,8 +5,6 @@ import lombok.Getter;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 @ApplicationScoped
@@ -33,6 +31,10 @@ public class CustomGson {
     }
 
     public <T> T fromJson(String json, Class<T> classOfT) {
-        return gson.fromJson(json, classOfT);
+        try {
+            return gson.fromJson(json, classOfT);
+        } catch (JsonSyntaxException e) {
+            return null;
+        }
     }
 }
