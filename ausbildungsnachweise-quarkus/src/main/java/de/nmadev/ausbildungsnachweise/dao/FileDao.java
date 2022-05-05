@@ -101,6 +101,18 @@ public abstract class FileDao<T extends JsonEntity> {
     }
 
 
+    /**
+     * Deletes the specified Entity from the Cache as well as the file. <br>
+     * This method does <b>not</b> perform Security Checks, it expects those to be done before.
+     * @param id the ID of the Entity to delete
+     * @return whether the operation was successful
+     */
+    public void deleteEntity(Long id) {
+        cache.invalidate(id);
+        updateFile();
+    }
+
+
 
     private void updateFile() {
         fileManager.updateDataFile(getDataFile(), cache.asMap().values());

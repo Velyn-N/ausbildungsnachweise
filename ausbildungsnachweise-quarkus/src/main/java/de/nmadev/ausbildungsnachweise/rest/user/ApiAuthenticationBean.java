@@ -21,7 +21,6 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -92,6 +91,7 @@ public class ApiAuthenticationBean {
             return NumberUtils.toLong(claimedUserId);
         } catch (JwtException e) {
             log.warn("Could not Parse JWT: {}, Error: {}", jwt, e.getMessage());
+            if (e.getMessage().contains("JWT signature does not match locally computed signature.")) log.warn("This Error occurs regularly after Application restarts.");
             return null;
         }
     }

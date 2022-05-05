@@ -23,7 +23,7 @@
               <td>Dauer</td>
             </tr>
             <tr>
-              <td colspan="2">
+              <td colspan="3">
                 <hr>
               </td>
             </tr>
@@ -32,6 +32,10 @@
               <tr>
                 <td>{{ activity.activity }}</td>
                 <td>{{ activity.durationHours }}</td>
+                <td>
+                  <q-icon name="fas fa-pencil" class="clickable" @click="editingActivity = activity; editDialogOpen = true" />
+                  <q-icon name="fas fa-trash" class="clickable q-ml-sm" @click="deletionActivity = activity; deleteConfirmOpen = true" />
+                </td>
               </tr>
             </tbody>
           </table>
@@ -62,7 +66,7 @@
           </tr>
           <tr>
             <td>
-              <q-input input-class="text-center" v-model.number="newActivity.durationHours" type="number" label="Dauer (in Stunden)" />
+              <q-input input-class="text-center" v-model.number="newActivity.durationHours" label="Dauer (in Stunden)" />
             </td>
           </tr>
           <tr>
@@ -76,6 +80,38 @@
       </table>
     </q-card-section>
   </q-card>
+
+
+
+  <q-dialog v-model="editDialogOpen">
+    <q-card style="min-width: 50vw">
+      <form onsubmit="return false" v-if="editingActivity !== null" >
+        <q-card-section class="text-center">
+          <span style="font-size: 150%">Aktivität vom <b>{{editingActivity.date}}</b> bearbeiten</span>
+        </q-card-section>
+        <q-card-section class="full-width column wrap">
+          <q-input v-model="editingActivity.activity" label="Aktivität" type="textarea" class="q-mb-sm" />
+          <q-input input-class="text-center q-ma-sm" v-model.number="editingActivity.durationHours" type="number" label="Dauer (in Stunden)" class="q-mb-md" />
+          <q-btn type="submit" @click="saveEditActivity()" class="full-width justify-center" v-close-popup>
+            <q-icon name="fas fa-save"></q-icon>
+          </q-btn>
+        </q-card-section>
+      </form>
+    </q-card>
+  </q-dialog>
+
+  <q-dialog v-model="deleteConfirmOpen">
+    <q-card style="min-width: 25vw" class="text-center">
+      <q-card-section>
+        Soll diese Aktivität wirklich gelöscht werden?
+      </q-card-section>
+      <q-card-section>
+        <q-btn @click="deleteActivity(deletionActivity.id)" v-close-popup>
+          Aktivität löschen
+        </q-btn>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup>
@@ -151,11 +187,46 @@ function addActivity() {
     updateActivities()
   })
   .catch((err) => {
-    $q.notify("Fehler beim Speichern der Aktivitäten!")
+    $q.notify("Fehler beim Speichern der neuen Aktivität!")
     console.log(err)
   })
 
   newActivity.value = getPlaceholderActivity()
+}
+
+
+
+const editingActivity = ref(null)
+const editDialogOpen = ref(false)
+
+function saveEditActivity() {
+  loading.value = true
+  api.post("/rest/activities/change", editingActivity.value)
+  .then(() => {
+    loadMyActivities()
+    updateActivities()
+  })
+  .catch((err) => {
+    $q.notify("Fehler beim Bearbeiten der Aktivität.")
+    console.log(err)
+  })
+}
+
+const deletionActivity = ref(null)
+const deleteConfirmOpen = ref(false)
+
+function deleteActivity(activityId) {
+  console.log(deletionActivity.value)
+  console.log(activityId)
+  api.post("/rest/activities/delete", activityId)
+  .then(() => {
+    loadMyActivities()
+    updateActivities()
+  })
+  .catch((err) => {
+    $q.notify("Fehler beim Löschen der Aktivität.")
+    console.log(err)
+  })
 }
 </script>
 
@@ -163,5 +234,9 @@ function addActivity() {
 .activityCard {
   max-height: 80vh;
   overflow-y: scroll;
+}
+
+.clickable {
+  cursor: pointer;
 }
 </style>
