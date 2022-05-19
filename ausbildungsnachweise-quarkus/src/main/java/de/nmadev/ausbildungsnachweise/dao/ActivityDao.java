@@ -27,10 +27,6 @@ public class ActivityDao extends FileDao<NachweisActivity> {
         super.saveEntity(activity);
     }
 
-    public void persistActivityList(List<NachweisActivity> list) {
-        super.saveEntityList(list);
-    }
-
     @Override
     protected JsonStorageFileManager.DataFile getDataFile() {
         return JsonStorageFileManager.DataFile.ACTIVITIES;
