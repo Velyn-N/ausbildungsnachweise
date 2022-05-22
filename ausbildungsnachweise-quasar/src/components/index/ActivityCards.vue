@@ -71,7 +71,7 @@
           </tr>
           <tr>
             <td class="text-left">
-              <q-btn @click="addActivity()">
+              <q-btn @click="activityStore.addActivity(newActivity, updateActivities)">
                 <q-icon name="fas fa-plus"></q-icon>
               </q-btn>
             </td>
@@ -92,7 +92,7 @@
         <q-card-section class="full-width column wrap">
           <q-input v-model="editingActivity.activity" label="Aktivität" type="textarea" class="q-mb-sm" />
           <q-input input-class="text-center q-ma-sm" v-model.number="editingActivity.durationHours" type="number" label="Dauer (in Stunden)" class="q-mb-md" />
-          <q-btn type="submit" @click="saveEditActivity()" class="full-width justify-center" v-close-popup>
+          <q-btn type="submit" @click="activityStore.saveActivity(editingActivity, updateActivities)" class="full-width justify-center" v-close-popup>
             <q-icon name="fas fa-save"></q-icon>
           </q-btn>
         </q-card-section>
@@ -106,7 +106,7 @@
         Soll diese Aktivität wirklich gelöscht werden?
       </q-card-section>
       <q-card-section>
-        <q-btn @click="deleteActivity(deletionActivity.id)" v-close-popup>
+        <q-btn @click="activityStore.deleteActivity(deletionActivity.id, updateActivities)" v-close-popup>
           Aktivität löschen
         </q-btn>
       </q-card-section>
@@ -116,39 +116,28 @@
 
 <script setup>
 import {useApiUser} from "stores/apiUserStore";
-import {api} from "boot/axios";
+import {useActivityStore} from "stores/activityStore";
 import {useQuasar} from "quasar";
 import {ref} from "vue";
 
 const apiUserStore = useApiUser()
+const activityStore = useActivityStore()
 const $q = useQuasar()
 
 const loading = ref(true)
-const myActivities = ref(null)
 const activityDisplayList = ref(null)
-
 const newActivity = ref(getPlaceholderActivity())
 
-loadMyActivities()
+const editingActivity = ref(null)
+const editDialogOpen = ref(false)
 
-function loadMyActivities() {
-  api.get("/rest/activities/myactivities")
-  .then((response) => {
-    if (response.data !== undefined && response.data !== null) {
-      myActivities.value = response.data
-      updateActivities()
-    } else {
-      myActivities.value = []
-    }
-  })
-  .catch((err) => {
-    $q.notify("Es gab einen Fehler beim laden der Aktivitäten")
-    console.log(err)
-  })
-}
+const deletionActivity = ref(null)
+const deleteConfirmOpen = ref(false)
+
+activityStore.loadMyActivities(updateActivities)
 
 function updateActivities() {
-  activityDisplayList.value = mapActivitiesToDay(myActivities.value)
+  activityDisplayList.value = mapActivitiesToDay(activityStore.myActivities)
   loading.value = false
 }
 
@@ -172,61 +161,6 @@ function sumActivityDurations(activities) {
   let total = 0
   activities.forEach((act) => total += act.durationHours)
   return total
-}
-
-
-
-function addActivity() {
-  loading.value = true
-  myActivities.value.push(newActivity.value)
-  console.log(myActivities)
-
-  api.post("/rest/activities/add", newActivity.value)
-  .then(() => {
-    loadMyActivities()
-    updateActivities()
-  })
-  .catch((err) => {
-    $q.notify("Fehler beim Speichern der neuen Aktivität!")
-    console.log(err)
-  })
-
-  newActivity.value = getPlaceholderActivity()
-}
-
-
-
-const editingActivity = ref(null)
-const editDialogOpen = ref(false)
-
-function saveEditActivity() {
-  loading.value = true
-  api.post("/rest/activities/change", editingActivity.value)
-  .then(() => {
-    loadMyActivities()
-    updateActivities()
-  })
-  .catch((err) => {
-    $q.notify("Fehler beim Bearbeiten der Aktivität.")
-    console.log(err)
-  })
-}
-
-const deletionActivity = ref(null)
-const deleteConfirmOpen = ref(false)
-
-function deleteActivity(activityId) {
-  console.log(deletionActivity.value)
-  console.log(activityId)
-  api.post("/rest/activities/delete", activityId)
-  .then(() => {
-    loadMyActivities()
-    updateActivities()
-  })
-  .catch((err) => {
-    $q.notify("Fehler beim Löschen der Aktivität.")
-    console.log(err)
-  })
 }
 </script>
 

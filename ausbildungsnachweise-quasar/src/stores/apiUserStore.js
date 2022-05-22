@@ -34,8 +34,11 @@ const useApiUser = defineStore({
           }
         })
         .catch((err) => {
-          console.log(err)
+          console.error(err)
         })
+    },
+    isLoggedIn() {
+      return (this.apiUser.email.length > 0)
     }
   }
 })
