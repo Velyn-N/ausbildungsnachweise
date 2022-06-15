@@ -5,14 +5,16 @@ import lombok.Getter;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @ApplicationScoped
 public class CustomGson {
-    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     @Getter
-    private Gson gson;
+    private final Gson gson;
 
     public CustomGson() {
         gson = new GsonBuilder()
@@ -22,6 +24,12 @@ public class CustomGson {
                 .registerTypeAdapter(LocalDate.class,
                         (JsonSerializer<LocalDate>) (src, typeOfSrc, context) ->
                                 new JsonPrimitive(src.format(dateFormatter)))
+                .registerTypeAdapter(LocalDateTime.class,
+                        (JsonDeserializer<LocalDateTime>) (json, typeOfT, context) ->
+                                LocalDateTime.parse(json.getAsJsonPrimitive().getAsString(), dateTimeFormatter))
+                .registerTypeAdapter(LocalDateTime.class,
+                        (JsonSerializer<LocalDateTime>) (src, typeOfSrc, context) ->
+                                new JsonPrimitive(src.format(dateTimeFormatter)))
                 .setPrettyPrinting()
                 .create();
     }

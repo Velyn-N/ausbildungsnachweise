@@ -76,9 +76,9 @@ import {useApiUser} from "stores/apiUserStore";
 const $q = useQuasar()
 const apiUserStore = useApiUser()
 
-const showLoginDialog = ref(false)
+let showLoginDialog = ref(false)
 const loginData = reactive({email: "", password: ""})
-const isPwdInput = ref(true)
+let isPwdInput = ref(true)
 
 function login() {
   api.post("/rest/user/login", loginData).then((resp) => {

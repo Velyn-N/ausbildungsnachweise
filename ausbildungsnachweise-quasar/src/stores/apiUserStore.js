@@ -38,7 +38,7 @@ const useApiUser = defineStore({
         })
     },
     isLoggedIn() {
-      return (this.apiUser.email.length > 0)
+      return (this.apiUser.email !== undefined && this.apiUser.email.length > 0)
     }
   }
 })

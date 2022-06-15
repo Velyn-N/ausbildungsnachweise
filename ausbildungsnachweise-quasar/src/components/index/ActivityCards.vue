@@ -1,5 +1,6 @@
 <template>
-  <q-card :class="($q.platform.is.mobile) ? 'col-12' : 'col-5'" class="q-ma-sm activityCard" v-if="apiUserStore.apiUser.isAzubi">
+  <q-card :class="($q.platform.is.mobile) ? 'col-12' : 'col-4'" class="q-ma-sm activityCard"
+          v-if="apiUserStore.apiUser.isAzubi">
     <q-card-section>
       <h6>Meine Aktivitäten</h6>
     </q-card-section>
@@ -11,27 +12,29 @@
               <span class="text-left col-6">
                 {{ day }}
               </span>
-              <span class="text-center col-6">
-                {{ sumActivityDurations(activityDisplayList[day]) }}h ges.
+              <span style="display: none">{{ currentSum = sumActivityDurations(activityDisplayList[day]) }}</span>
+              <span class="text-center col-6"
+                    :class="(currentSum < 8) ? 'text-red' : (currentSum > 8) ? 'text-yellow' : 'text-green'">
+                {{ currentSum }}h ges.
               </span>
             </span>
           </template>
           <table class="full-width text-center">
             <thead class="bi-border-bottom">
-            <tr>
-              <td>Aktivität</td>
-              <td>Dauer</td>
-            </tr>
-            <tr>
-              <td colspan="3">
-                <hr>
-              </td>
-            </tr>
-            </thead>
-            <tbody v-for="activity in activityDisplayList[day]">
               <tr>
+                <td>Aktivität</td>
+                <td>Dauer</td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  <hr>
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="activity in activityDisplayList[day]">
                 <td>{{ activity.activity }}</td>
-                <td>{{ activity.durationHours }}</td>
+                <td>{{ activity.durationHours }}h</td>
                 <td>
                   <q-icon name="fas fa-pencil" class="clickable" @click="editingActivity = activity; editDialogOpen = true" />
                   <q-icon name="fas fa-trash" class="clickable q-ml-sm" @click="deletionActivity = activity; deleteConfirmOpen = true" />
@@ -49,7 +52,7 @@
 
 
 
-  <q-card :class="($q.platform.is.mobile) ? 'col-12' : 'col-5'" class="q-ma-sm" v-if="apiUserStore.apiUser.isAzubi">
+  <q-card :class="($q.platform.is.mobile) ? 'col-12' : 'col-3'" class="q-ma-sm" v-if="apiUserStore.apiUser.isAzubi">
     <q-card-section>
       <h6>Neue Aktivität anlegen</h6>
     </q-card-section>
@@ -127,6 +130,10 @@ const $q = useQuasar()
 const loading = ref(true)
 const activityDisplayList = ref(null)
 const newActivity = ref(getPlaceholderActivity())
+/**
+ * Variable (re-)assigned during v-for in Template
+ */
+const currentSum = ref(0)
 
 const editingActivity = ref(null)
 const editDialogOpen = ref(false)
