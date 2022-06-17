@@ -44,6 +44,7 @@ jobs:
 
     - name: Build Quarkus with Maven
       run: |
+        cd ausbildungsnachweise-quarkus
         mvn clean package
 
     - name: Login to Docker Hub
