@@ -36,33 +36,15 @@ jobs:
         cd ausbildungsnachweise-quasar
         npm ci
         npx quasar build
+        ls dist/spa
 
     - name: Copy Quasar Build to Quarkus
       run: |
         mkdir -p ausbildungsnachweise-quarkus/src/main/resources/META-INF/resources
         cp -r ausbildungsnachweise-quasar/dist/spa ausbildungsnachweise-quarkus/src/main/resources/META-INF/resources
+        ls ausbildungsnachweise-quarkus/src/main/resources/META-INF/resources
 
-    - name: Build Quarkus with Maven
+    - name: Build Quarkus Container with Maven and Push to DockerHub
       run: |
         cd ausbildungsnachweise-quarkus
-        mvn clean package
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-    - name: Build Container and Push to DockerHub
-      id: docker_build
-      uses: docker/build-push-action@v3
-      with:
-          context: ausbildungsnachweise-quarkus/
-          file: ausbildungsnachweise-quarkus/src/main/docker/Dockerfile.jvm
-          push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/ausbildungsnachweise:latest
-
-# Result Logging
-
-    - name: Image digest
-      run: echo ${{ steps.docker_build.outputs.digest }}
+        mvn clean package -Dquarkus.container-image.build=true -Dquarkus.container-image.tag=${{ secrets.DOCKER_HUB_USERNAME }}/ausbildungsnachweise:latest -Dquarkus.container-image.username=${{ secrets.DOCKER_HUB_USERNAME }} -Dquarkus.container-image.password=${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} -Dquarkus.container-image.push=true
