@@ -40,7 +40,7 @@ jobs:
     - name: Copy Quasar Build to Quarkus
       run: |
         mkdir -p ausbildungsnachweise-quarkus/src/main/resources/META-INF/resources
-        cp -r ausbildungsnachweise-quasar/dist/spa ausbildungsnachweise-quarkus/src/main/resources/META-INF/resources
+        cp -a ausbildungsnachweise-quasar/dist/spa/. ausbildungsnachweise-quarkus/src/main/resources/META-INF/resources
 
     - name: Build Quarkus with Maven
       run: |
