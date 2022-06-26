@@ -101,7 +101,7 @@ public class JsonStorageFileManager {
         ACTIVITIES("/activities.json"),
         NACHWEISE("/nachweise.json");
 
-        public String filename;
+        public final String filename;
 
         DataFile(String filename) {
             this.filename = filename;
