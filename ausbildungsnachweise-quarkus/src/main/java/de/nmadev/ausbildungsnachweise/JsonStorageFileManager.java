@@ -41,6 +41,7 @@ public class JsonStorageFileManager {
                     }
                 } catch (IOException e) {
                     log.error("Tried to create File {}, but failed! Error: {}", file.getPath(), e.getMessage());
+                    log.error("If this problem keeps occurring please create the file '{}' in the data folder yourself! Also grant read & write permissions on it.", df.filename);
                 }
             }
             if (!file.canRead()) {
