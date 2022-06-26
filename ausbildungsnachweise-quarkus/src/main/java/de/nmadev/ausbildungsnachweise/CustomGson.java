@@ -30,7 +30,7 @@ public class CustomGson {
                 .registerTypeAdapter(LocalDateTime.class,
                         (JsonSerializer<LocalDateTime>) (src, typeOfSrc, context) ->
                                 new JsonPrimitive(src.format(dateTimeFormatter)))
-                .setPrettyPrinting()
+//                .setPrettyPrinting()
                 .create();
     }
 
