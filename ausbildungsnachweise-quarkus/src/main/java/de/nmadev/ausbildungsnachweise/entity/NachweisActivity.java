@@ -15,7 +15,7 @@ public class NachweisActivity implements Serializable, JsonEntity {
     private Long userId;
     private LocalDate date;
     private String activity;
-    private double durationHours;
+    private Integer durationHours;
 
     @Override
     public boolean isValid() {

@@ -8,6 +8,7 @@
         </q-btn>
       </span>
       </h6>
+
     </q-card-section>
     <q-card-section>
       <q-list v-for="nachweis in nachweisStore.myNachweise">
@@ -17,7 +18,7 @@
                   :class="(nachweis.signedByAzubi && nachweis.signedByAusbilder) ? 'text-green' :
                     (apiUserStore.apiUser.isAzubi && nachweis.signedByAzubi) ? 'text-blue' :
                     (apiUserStore.apiUser.isAusbilder && nachweis.signedByAzubi && !nachweis.signedByAusbilder) ? 'text-yellow' : ''">
-              {{ nachweis.startDate }} - {{ nachweis.endDate }}
+              {{ nachweis.startDate }} - {{ nachweis.endDate }} ({{ (apiUserStore.apiUser.isAzubi) ? nachweis.ausbilderId : nachweis.azubiId }})
             </span>
           </template>
           <table class="full-width">

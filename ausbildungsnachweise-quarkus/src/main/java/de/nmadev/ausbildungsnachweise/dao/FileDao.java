@@ -18,7 +18,7 @@ public abstract class FileDao<T extends JsonEntity> {
     @Inject
     JsonStorageFileManager fileManager;
 
-    private Cache<Long, T> cache = CacheBuilder.newBuilder().build();
+    private final Cache<Long, T> cache = CacheBuilder.newBuilder().build();
 
     @PostConstruct
     void init() {

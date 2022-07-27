@@ -15,7 +15,7 @@
               <span style="display: none">{{ currentSum = sumActivityDurations(activityDisplayList[day]) }}</span>
               <span class="text-center col-6"
                     :class="(currentSum < 8) ? 'text-red' : (currentSum > 8) ? 'text-yellow' : 'text-green'">
-                {{ currentSum }}h ges.
+                <MinuteDisplay :minutes="currentSum"/> ges.
               </span>
             </span>
           </template>
@@ -34,7 +34,9 @@
             <tbody>
               <tr v-for="activity in activityDisplayList[day]">
                 <td>{{ activity.activity }}</td>
-                <td>{{ activity.durationHours }}h</td>
+                <td>
+                  <MinuteDisplay :minutes="activity.durationHours" />
+                </td>
                 <td>
                   <q-icon name="fas fa-pencil" class="clickable" @click="editingActivity = activity; editDialogOpen = true" />
                   <q-icon name="fas fa-trash" class="clickable q-ml-sm" @click="deletionActivity = activity; deleteConfirmOpen = true" />
@@ -69,7 +71,7 @@
           </tr>
           <tr>
             <td>
-              <q-input input-class="text-center" v-model.number="newActivity.durationHours" label="Dauer (in Stunden)" />
+              <MinuteInput class="text-center" label="Dauer" v-model="newActivity.durationHours" />
             </td>
           </tr>
           <tr>
@@ -94,7 +96,7 @@
         </q-card-section>
         <q-card-section class="full-width column wrap">
           <q-input v-model="editingActivity.activity" label="Aktivität" type="textarea" class="q-mb-sm" />
-          <q-input input-class="text-center q-ma-sm" v-model.number="editingActivity.durationHours" type="number" label="Dauer (in Stunden)" class="q-mb-md" />
+          <MinuteInput v-model="editingActivity.durationHours" class="text-center q-ma-sm q-mb-md" label="Dauer" />
           <q-btn type="submit" @click="activityStore.saveActivity(editingActivity, updateActivities)" class="full-width justify-center" v-close-popup>
             <q-icon name="fas fa-save"></q-icon>
           </q-btn>
@@ -118,6 +120,8 @@
 </template>
 
 <script setup>
+import MinuteDisplay from "components/time/MinuteDisplay.vue";
+import MinuteInput from "components/time/MinuteInput.vue";
 import {useApiUser} from "stores/apiUserStore";
 import {useActivityStore} from "stores/activityStore";
 import {useQuasar} from "quasar";
@@ -135,11 +139,11 @@ const newActivity = ref(getPlaceholderActivity())
  */
 const currentSum = ref(0)
 
-const editingActivity = ref(null)
-const editDialogOpen = ref(false)
+let editingActivity = ref(null)
+let editDialogOpen = ref(false)
 
-const deletionActivity = ref(null)
-const deleteConfirmOpen = ref(false)
+let deletionActivity = ref(null)
+let deleteConfirmOpen = ref(false)
 
 activityStore.loadMyActivities(updateActivities)
 

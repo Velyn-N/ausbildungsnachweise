@@ -7,4 +7,5 @@ export class ApiUser {
 
   isAzubi = false
   isAusbilder = false
+  isAdmin = false
 }

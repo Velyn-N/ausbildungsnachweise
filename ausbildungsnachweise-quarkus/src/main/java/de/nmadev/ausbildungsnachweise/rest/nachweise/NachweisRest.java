@@ -4,15 +4,16 @@ import de.nmadev.ausbildungsnachweise.CustomGson;
 import de.nmadev.ausbildungsnachweise.dao.NachweisDao;
 import de.nmadev.ausbildungsnachweise.entity.AusbildungsNachweis;
 import de.nmadev.ausbildungsnachweise.rest.user.RequestUserBean;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Slf4j
 @Path("/rest/nachweise")
 public class NachweisRest {
 
@@ -109,6 +110,11 @@ public class NachweisRest {
 
         if (didAzubiChange) {
             newNw.setAzubiSignDate(LocalDateTime.now());
+            log.info("{} signed Nachweis {} ({} - {}) as Azubi",
+                    requestUser.getUser().getEmail(),
+                    newNw.getId(),
+                    newNw.getStartDate(),
+                    newNw.getEndDate());
         }
 
         boolean mayAusbilderChangeSign = (isAusbilder
@@ -119,6 +125,11 @@ public class NachweisRest {
 
         if (didAusbilderChange) {
             newNw.setAusbilderSignDate(LocalDateTime.now());
+            log.info("{} signed Nachweis {} ({} - {}) as Ausbilder",
+                    requestUser.getUser().getEmail(),
+                    newNw.getId(),
+                    newNw.getStartDate(),
+                    newNw.getEndDate());
         }
 
         return (mayAzubiChangeSign && didAzubiChange) || (mayAusbilderChangeSign && didAusbilderChange);

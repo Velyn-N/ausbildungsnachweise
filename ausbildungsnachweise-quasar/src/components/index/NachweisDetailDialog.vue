@@ -9,6 +9,16 @@
           <hr>
           <div class="row q-mt-lg">
             <div class="col">
+              <b>Azubi:</b><br>
+              {{ nachweis.azubiId }}
+            </div>
+            <div class="col">
+              <b>Ausbilder:</b><br>
+              {{ nachweis.ausbilderId }}
+            </div>
+          </div>
+          <div class="row q-mt-lg">
+            <div class="col">
               <b>Ausbildungsjahr:</b><br>
               {{ nachweis.ausbildungsjahr }}
             </div>
@@ -50,7 +60,9 @@
                 <tr>
                   <td>{{ activity.date }}</td>
                   <td>{{ activity.activity }}</td>
-                  <td>{{ activity.durationHours }}h</td>
+                  <td>
+                    <MinuteDisplay :minutes="activity.durationHours" />
+                  </td>
                 </tr>
                 <tr v-if="index === nachweis.activities.length">
                   <td colspan="4">
@@ -70,14 +82,11 @@
 </template>
 
 <script setup>
+import MinuteDisplay from "components/time/MinuteDisplay.vue";
 import {useNachweisStore} from "stores/nachweisStore";
-import {useQuasar} from "quasar";
 import {computed} from "vue";
-import {useApiUser} from "stores/apiUserStore";
 
 const props = defineProps(['nachweisid'])
-const $q = useQuasar()
-const apiUserStore = useApiUser()
 const nachweisStore = useNachweisStore()
 
 const nachweis = computed(() => {
