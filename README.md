@@ -1,36 +1,36 @@
 # ausbildungsnachweise
-[![Build Status](http://jenkins.nma-dev.de/buildStatus/icon?job=ausbildungsnachweise)](http://jenkins.nma-dev.de/job/ausbildungsnachweise/)
-
-→ Download Builds at [Jenkins](http://jenkins.nma-dev.de/job/ausbildungsnachweise)
+[![Autobuild and Release to DockerHub](https://github.com/Velyn-N/ausbildungsnachweise/actions/workflows/build.yml/badge.svg)](https://github.com/Velyn-N/ausbildungsnachweise/actions/workflows/build.yml)
 
 <br>
 
-Dieses Repo enthält ein Tool zum Führen, Verwalten und Exportieren von Ausbildungsnachweisen der IHK.
+Dieses Repo enthält ein Tool zum Führen, Verwalten und Exportieren von Ausbildungsnachweisen der IHK.<br>
+Die Interaktion mit der Applikation erfolgt per WebInterface.
 
 Das Projekt wurde in Java 17 ([Quarkus Framework](https://quarkus.io/)) und Vue.js 3 ([Quasar Framework](https://quasar.dev/)) geschrieben.
 
-### Die Applikation starten
+<br>
 
-1. Den neuesten Build von [Jenkins](http://jenkins.nma-dev.de/job/ausbildungsnachweise/) herunterladen.<br>
-Dazu die <code>ausbildungsnachweise-1.0.0-runner.jar</code> wählen. (Wird in Zukunft durch Docker Builds ersetzt)
-2. Auf einem beliebigen Server die .jar ausführen.<br>
-Dazu wird ein installiertes Java 17 JRE oder JDK benötigt!
-3. Auf Port :8080 ist nun das WebInterface der Applikation verfügbar!
+## Die Applikation installieren
+
+### __Vorbereitung__
+Installiere [Docker](https://docs.docker.com/engine/install/) auf deinem System
 
 <br>
 
+### __Container-Einrichtung und -Konfiguration__
+In diesem Guide werden die vorkompilierten Docker-Container von DockerHub benutzt. Um eigene Container einzusetzen ändere den Imagenamen.<br>
 <br>
+Weise einen Port deines Systems dem Port `:8080` des Containers zu, um später auf das WebInterface zugreifen zu können.<br>
+- "1234" entspricht dabei dem Port auf welchem das WebInterface erreichbar sein wird.
+- "/path/to/your/data" entspricht dem Pfad auf dem Hostsystem an dem die Dateien gespeichert werden sollen.
+- "MeineApplikation" ist der Name unter dem der Container verfügbar sein wird.
+```
+docker run -d \
+    -p 1234:8080 \
+    -v /path/to/your/data:/app/nachweise/data \
+    --name MeineApplikation \
+    velyn/ausbildungsnachweise
+```
 
-## English Version
-
-This repository contains a tool to manage "ausbildungsnachweise" for the german IHK.
-
-The project is written using Java 17 ([Quarkus Framework](https://quarkus.io/)) and Vue.js 3 ([Quasar Framework](https://quasar.dev/)).
-
-### Running the Application
-
-1. Download the latest Build from [Jenkins](http://jenkins.nma-dev.de/job/ausbildungsnachweise/).<br>
-Choose the <code>ausbildungsnachweise-1.0.0-runner.jar</code>. (It will be replaced by Docker Builds in the future)
-2. Run the .jar on a Server of your choice.<br>
-Therefore a Java 17 JRE or JDK is required!
-3. The applications WebInterface is now accessible on Port :8080
+### __Initiale Einrichtung der Applikation__
+Dieser Teil wird hinzugefügt, sobald er implementiert wurde.
