@@ -22,9 +22,7 @@ public class NachweisActivity implements Serializable, JsonEntity {
         return userId != null
                 && userId != -1L
                 && date != null
-                && StringUtils.isNotBlank(activity)
-                && 0 < durationHours
-                && 24 >= durationHours;
+                && StringUtils.isNotBlank(activity);
     }
 
     @Override
