@@ -84,10 +84,12 @@
 <script setup>
 import MinuteDisplay from "components/time/MinuteDisplay.vue";
 import {useNachweisStore} from "stores/nachweisStore";
-import {computed} from "vue";
+import {computed, ref} from "vue";
 
 const props = defineProps(['nachweisid'])
 const nachweisStore = useNachweisStore()
+
+const currDate = ref(null)
 
 const nachweis = computed(() => {
   let results = nachweisStore.myNachweise.filter(it => it.id === props.nachweisid)

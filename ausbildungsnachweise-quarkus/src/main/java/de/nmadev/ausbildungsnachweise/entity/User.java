@@ -18,12 +18,26 @@ public class User implements Serializable, JsonEntity {
 
 	private boolean isAzubi = false;
 	private boolean isAusbilder = false;
+	private boolean isAdmin = false;
 
 	@Override
 	public boolean isValid() {
 		return StringUtils.isNotBlank(email)
 				&& StringUtils.isNotBlank(password)
 				&& StringUtils.isNotBlank(fullName)
-				&& isAzubi || isAusbilder;
+				&& isAzubi || isAusbilder || isAdmin;
+	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"id=" + id +
+				", locked=" + locked +
+				", email='" + email + '\'' +
+				", fullName='" + fullName + '\'' +
+				", isAzubi=" + isAzubi +
+				", isAusbilder=" + isAusbilder +
+				", isAdmin=" + isAdmin +
+				'}';
 	}
 }

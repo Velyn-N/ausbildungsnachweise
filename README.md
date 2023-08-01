@@ -15,8 +15,6 @@ Das Projekt wurde in Java 17 ([Quarkus Framework](https://quarkus.io/)) und Vue.
 ### __Vorbereitung__
 Installiere [Docker](https://docs.docker.com/engine/install/) auf deinem System
 
-<br>
-
 ### __Container-Einrichtung und -Konfiguration__
 In diesem Guide werden die vorkompilierten Docker-Container von DockerHub benutzt. Um eigene Container einzusetzen ändere den Imagenamen.<br>
 <br>
@@ -33,4 +31,48 @@ docker run -d \
 ```
 
 ### __Initiale Einrichtung der Applikation__
-Dieser Teil wird hinzugefügt, sobald er implementiert wurde.
+Nach der Installation muss sichergestellt werden, dass die benötigten Dateien verfügbar sind. <br>
+Die Lognachrichten beim Applikationsstart melden relevante Fehler. Die Applikation kann ohne diese Dateien nicht funktionieren.
+
+Zum Anlegen neuer Benutzer navigiere zu der Seite `/#/new-user`.
+
+<br>
+
+## Entwicklung
+Zum Entwickeln werden folgende Tools benötigt:
+- Java 17 oder neuer
+- NodeJS 16 oder neuer
+
+Zuerst muss man die Dependencies des FrontEnds mit folgendem Befehl im Ordner `ausbildungsnachweise-quasar` installieren:
+```shell
+npm install
+```
+
+Anschließend startet man das BackEnd mit folgendem Befehl im Ordner `ausbildungsnachweise-quarkus`:
+```shell
+./mvnw compile quarkus:dev
+```
+
+Dann startet man das FrontEnd mit folgendem Befehl im Ordner `ausbildungsnachweise-quasar`:
+```shell
+npx dev
+```
+
+<br>
+
+## Bauen für Production
+
+1. Vue-App bauen:
+```shell
+npx quasar build
+```
+
+2. Dateien aus `ausbildungsnachweise-quasar/dist/spa` nach `ausbildungsnachweise-quarkus/src/main/resources/META-INF/resources` kopieren
+
+3. Quarkus Applikation bauen:
+```shell
+./mvnw clean package -Dquarkus.package.type=uber-jar
+```
+
+4. (Optional) Docker Image bauen:
+Dazu das Dockerfile `ausbildungsnachweise-quarkus/src/main/docker/Dockerfile.jvm` bauen.

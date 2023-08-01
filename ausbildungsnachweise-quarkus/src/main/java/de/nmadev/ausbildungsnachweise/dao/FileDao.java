@@ -5,8 +5,8 @@ import com.google.common.cache.CacheBuilder;
 import de.nmadev.ausbildungsnachweise.JsonStorageFileManager;
 import de.nmadev.ausbildungsnachweise.entity.JsonEntity;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;

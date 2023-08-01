@@ -6,6 +6,11 @@
           Ausbildungsnachweise
         </q-toolbar-title>
 
+        <div v-if="apiUserStore.apiUser.isAdmin || userCount === 0" class="q-mr-md">
+          <router-link to="/new-user">
+            Neuen Benutzer erstellen
+          </router-link>
+        </div>
         <div v-if="apiUserStore.apiUser.email.length > 0">
           Logged in as {{ apiUserStore.apiUser.email }}. <a class="link" @click="logout">Logout?</a>
         </div>
@@ -97,6 +102,14 @@ function login() {
 function logout() {
   apiUserStore.logout()
 }
+
+
+
+const userCount = ref(-1)
+
+api.get("/rest/user/count").then(resp => {
+  userCount.value = resp.data
+})
 </script>
 
 <style>

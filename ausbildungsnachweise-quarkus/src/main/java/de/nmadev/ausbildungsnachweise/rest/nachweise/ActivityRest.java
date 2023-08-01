@@ -4,12 +4,12 @@ import de.nmadev.ausbildungsnachweise.CustomGson;
 import de.nmadev.ausbildungsnachweise.dao.ActivityDao;
 import de.nmadev.ausbildungsnachweise.entity.NachweisActivity;
 import de.nmadev.ausbildungsnachweise.rest.user.RequestUserBean;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.Optional;
 
 @Path("/rest/activities")
