@@ -1,6 +1,5 @@
 <template>
-  <q-card :class="($q.platform.is.mobile) ? 'col-12' : 'col-4'" class="q-ma-sm activityCard"
-          v-if="apiUserStore.apiUser.isAzubi">
+  <div v-if="apiUserStore.apiUser.isAzubi">
     <q-card-section>
       <h6>Meine Aktivitäten</h6>
     </q-card-section>
@@ -21,27 +20,27 @@
           </template>
           <table class="full-width text-center">
             <thead class="bi-border-bottom">
-              <tr>
-                <td>Aktivität</td>
-                <td>Dauer</td>
-              </tr>
-              <tr>
-                <td colspan="3">
-                  <hr>
-                </td>
-              </tr>
+            <tr>
+              <td>Aktivität</td>
+              <td>Dauer</td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                <hr>
+              </td>
+            </tr>
             </thead>
             <tbody>
-              <tr v-for="activity in activityDisplayList[day]">
-                <td>{{ activity.activity }}</td>
-                <td>
-                  <MinuteDisplay :minutes="activity.durationHours" />
-                </td>
-                <td>
-                  <q-icon name="fas fa-pencil" class="clickable" @click="editingActivity = activity; editDialogOpen = true" />
-                  <q-icon name="fas fa-trash" class="clickable q-ml-sm" @click="deletionActivity = activity; deleteConfirmOpen = true" />
-                </td>
-              </tr>
+            <tr v-for="activity in activityDisplayList[day]">
+              <td>{{ activity.activity }}</td>
+              <td>
+                <MinuteDisplay :minutes="activity.durationHours" />
+              </td>
+              <td>
+                <q-icon name="fas fa-pencil" class="clickable" @click="editingActivity = activity; editDialogOpen = true" />
+                <q-icon name="fas fa-trash" class="clickable q-ml-sm" @click="deletionActivity = activity; deleteConfirmOpen = true" />
+              </td>
+            </tr>
             </tbody>
           </table>
         </q-expansion-item>
@@ -50,43 +49,7 @@
     <q-card-section v-else>
       <q-icon name="fas fa-spinner fa-spin" />
     </q-card-section>
-  </q-card>
-
-
-
-  <q-card :class="($q.platform.is.mobile) ? 'col-12' : 'col-3'" class="q-ma-sm" v-if="apiUserStore.apiUser.isAzubi">
-    <q-card-section>
-      <h6>Neue Aktivität anlegen</h6>
-    </q-card-section>
-    <q-card-section>
-      <table class="full-width">
-        <tbody>
-          <tr>
-            <td rowspan="3">
-              <q-date v-model="newActivity.date" minimal mask="DD.MM.YYYY" />
-            </td>
-            <td>
-              <q-input v-model="newActivity.activity" label="Aktivität" type="textarea" />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <MinuteInput class="text-center" label="Dauer" v-model="newActivity.durationHours" />
-            </td>
-          </tr>
-          <tr>
-            <td class="text-left">
-              <q-btn @click="activityStore.addActivity(newActivity, updateActivities)">
-                <q-icon name="fas fa-plus"></q-icon>
-              </q-btn>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </q-card-section>
-  </q-card>
-
-
+  </div>
 
   <q-dialog v-model="editDialogOpen">
     <q-card style="min-width: 50vw">
@@ -125,7 +88,7 @@ import MinuteInput from "components/time/MinuteInput.vue";
 import {useApiUser} from "stores/apiUserStore";
 import {useActivityStore} from "stores/activityStore";
 import {useQuasar} from "quasar";
-import {ref} from "vue";
+import {ref, onMounted} from "vue";
 
 const apiUserStore = useApiUser()
 const activityStore = useActivityStore()
@@ -133,7 +96,7 @@ const $q = useQuasar()
 
 const loading = ref(true)
 const activityDisplayList = ref(null)
-const newActivity = ref(getPlaceholderActivity())
+
 /**
  * Variable (re-)assigned during v-for in Template
  */
@@ -145,15 +108,13 @@ let editDialogOpen = ref(false)
 let deletionActivity = ref(null)
 let deleteConfirmOpen = ref(false)
 
-activityStore.loadMyActivities(updateActivities)
+onMounted(() => {
+  activityStore.loadMyActivities(updateActivities)
+})
 
 function updateActivities() {
   activityDisplayList.value = mapActivitiesToDay(activityStore.myActivities)
   loading.value = false
-}
-
-function getPlaceholderActivity() {
-  return {date: null, activity: null, durationHours: null}
 }
 
 function mapActivitiesToDay(activities) {
@@ -176,11 +137,6 @@ function sumActivityDurations(activities) {
 </script>
 
 <style>
-.activityCard {
-  max-height: 80vh;
-  overflow-y: scroll;
-}
-
 .clickable {
   cursor: pointer;
 }

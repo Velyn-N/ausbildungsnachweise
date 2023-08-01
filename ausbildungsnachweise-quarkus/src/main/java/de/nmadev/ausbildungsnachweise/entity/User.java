@@ -18,6 +18,7 @@ public class User implements Serializable, JsonEntity {
 
 	private boolean isAzubi = false;
 	private boolean isAusbilder = false;
+	private boolean isAdmin = false;
 
 	@Override
 	public boolean isValid() {

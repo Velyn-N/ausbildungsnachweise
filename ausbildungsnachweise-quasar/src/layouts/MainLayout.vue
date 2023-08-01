@@ -15,30 +15,20 @@
       </q-toolbar>
     </q-header>
 
-    <q-page-container style="background-color: #222222">
+    <q-page-container style="background-color: #222222; overflow-y: scroll;" class="justify-center">
       <router-view />
     </q-page-container>
 
-    <q-footer class="row q-pt-sm q-pl-md q-pr-md q-pb-sm">
-      <div class="col text-left">
-        <a class="text-grey-4" href="https://github.com/Velyn-N/ausbildungsnachweise" target="_blank">
-          Ausbildungsnachweise
-        </a>
-        by
-        <a class="text-grey-4" href="https://github.com/Velyn-N" target="_blank">
-          Velyn-N/NMA
-        </a>
-      </div>
-      <div class="col text-right">
-        Build with
-        <a class="text-grey-4" href="https://quasar.dev/" target="_blank">
-          Quasar
-        </a>
-        and
-        <a class="text-grey-4" href="https://quarkus.io/" target="_blank">
-          Quarkus
-        </a>
-      </div>
+    <q-footer class="row q-pt-sm q-pl-md q-pr-md q-pb-sm justify-around">
+      <q-btn to="createactivity">
+        <q-icon name="fas fa-calendar"></q-icon>
+        <q-icon name="fas fa-plus"></q-icon>
+        <span class="q-ml-sm">
+          {{ ($q.platform.is.mobile) ? '' : 'Aktivität anlegen' }}
+        </span>
+      </q-btn>
+      <q-btn to="myactivities" icon="fas fa-calendar" :label="($q.platform.is.mobile) ? '' : 'Meine Aktivitäten'"></q-btn>
+      <q-btn to="nachweise" icon="fas fa-book" :label="($q.platform.is.mobile) ? '' : 'Meine Nachweise'"></q-btn>
     </q-footer>
   </q-layout>
 

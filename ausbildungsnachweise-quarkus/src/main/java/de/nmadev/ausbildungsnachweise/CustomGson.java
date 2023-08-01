@@ -3,7 +3,7 @@ package de.nmadev.ausbildungsnachweise;
 import com.google.gson.*;
 import lombok.Getter;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

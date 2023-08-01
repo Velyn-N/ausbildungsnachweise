@@ -3,13 +3,23 @@ package de.nmadev.ausbildungsnachweise.dao;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import de.nmadev.ausbildungsnachweise.JsonStorageFileManager;
 import de.nmadev.ausbildungsnachweise.entity.User;
+import org.apache.commons.lang3.StringUtils;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
 public class UserDao extends FileDao<User> {
+
+    public boolean persistUser(User user) {
+        return super.saveEntity(user);
+    }
+
+    public List<User> getAllUsers() {
+        return new ArrayList<>(super.getAllEntities());
+    }
 
     public List<User> getAusbilderUsers() {
         return super.getEntitiesMatching(User::isAusbilder);
@@ -17,6 +27,13 @@ public class UserDao extends FileDao<User> {
 
     public Optional<User> getUser(Long userId) {
         return super.getById(userId);
+    }
+
+    public Optional<User> getUserByEmail(String email) {
+        return super.getAllEntities()
+                .stream()
+                .filter(user -> StringUtils.equals(email, user.getEmail()))
+                .findAny();
     }
 
     public Optional<User> loginUser(String email, String password) {
@@ -28,6 +45,12 @@ public class UserDao extends FileDao<User> {
             }
         }
         return Optional.empty();
+    }
+
+
+
+    public static void changePassword(String password, User user) {
+        user.setPassword(hashPassword(password));
     }
 
     public static String hashPassword(String rawPassword) {

@@ -3,7 +3,7 @@ package de.nmadev.ausbildungsnachweise.dao;
 import de.nmadev.ausbildungsnachweise.JsonStorageFileManager;
 import de.nmadev.ausbildungsnachweise.entity.NachweisActivity;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

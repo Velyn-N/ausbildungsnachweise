@@ -16,10 +16,6 @@ watch(displayVal, async (newVal) => {
   let hours = +parts[0]
   let minutes = +parts[1]
 
-  if ((0 <= hours <= 24) && (0 <= minutes <= 59)) {
-
-  }
-
   let sum = (hours * 60) + minutes
   emitValue(isNaN(sum) ? 0 : sum)
 })

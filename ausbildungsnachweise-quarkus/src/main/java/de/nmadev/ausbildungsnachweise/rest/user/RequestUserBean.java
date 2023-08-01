@@ -4,13 +4,13 @@ import de.nmadev.ausbildungsnachweise.dao.UserDao;
 import de.nmadev.ausbildungsnachweise.entity.User;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.http.HttpServerRequest;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import java.util.Optional;
 
 @Slf4j

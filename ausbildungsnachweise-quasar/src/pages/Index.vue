@@ -3,7 +3,6 @@
     <div class="fit row wrap justify-center items-center content-center text-center">
 
       <NachweisCards />
-      <ActivityCards />
 
       <div v-if="!apiUserStore.isLoggedIn()">
         <h4 class="q-mb-md">Du bist nicht eingeloggt!</h4>
@@ -15,7 +14,6 @@
 </template>
 
 <script setup>
-import ActivityCards from "components/index/ActivityCards.vue";
 import {useApiUser} from "stores/apiUserStore";
 import NachweisCards from "components/index/NachweisCards.vue";
 

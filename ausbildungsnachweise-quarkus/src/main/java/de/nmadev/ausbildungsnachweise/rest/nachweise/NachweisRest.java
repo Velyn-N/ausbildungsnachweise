@@ -7,9 +7,9 @@ import de.nmadev.ausbildungsnachweise.rest.user.RequestUserBean;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import java.time.LocalDateTime;
 import java.util.Optional;
 

@@ -13,9 +13,7 @@ Das Projekt wurde in Java 17 ([Quarkus Framework](https://quarkus.io/)) und Vue.
 ## Die Applikation installieren
 
 ### __Vorbereitung__
-Installiere [Docker](https://docs.docker.com/engine/install/) auf deinem System
-
-<br>
+Installiere Docker auf deinem System. [Hier](https://docs.docker.com/engine/install/) findest du den offiziellen Guide.
 
 ### __Container-Einrichtung und -Konfiguration__
 In diesem Guide werden die vorkompilierten Docker-Container von DockerHub benutzt. Um eigene Container einzusetzen ändere den Imagenamen.<br>
