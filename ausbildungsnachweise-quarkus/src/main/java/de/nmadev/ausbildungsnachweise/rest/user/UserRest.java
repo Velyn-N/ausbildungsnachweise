@@ -3,14 +3,11 @@ package de.nmadev.ausbildungsnachweise.rest.user;
 import de.nmadev.ausbildungsnachweise.CustomGson;
 import de.nmadev.ausbildungsnachweise.dao.UserDao;
 import de.nmadev.ausbildungsnachweise.entity.User;
-import lombok.Data;
-
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.Serializable;
 
 @Slf4j
 @Path("/rest/user")
@@ -70,9 +67,16 @@ public class UserRest {
         }
     }
 
-    @Data
-    public static class LoginCredentials implements Serializable {
-        private String email;
-        private String password;
+    @POST
+    @Path("/change-password")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updatePassword(PasswordPair passwordPair) {
+        boolean success = userDao.updatePassword(requestUser.getUser(), passwordPair.oldPassword, passwordPair.newPassword);
+        return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST)
+                .entity(success)
+                .build();
     }
+
+    public record LoginCredentials(String email, String password) {}
+    public record PasswordPair(String oldPassword, String newPassword) {}
 }

@@ -6,6 +6,7 @@ import de.nmadev.ausbildungsnachweise.entity.User;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -56,6 +57,17 @@ public class UserDao extends FileDao<User> {
             log.warn("Benutzer müssen eine E-Mail, ein Passwort und einen vollen Namen haben. Außerdem müssen sie Azubi, Ausbilder oder Admin sein.");
         }
         return success;
+    }
+
+    public boolean updatePassword(User user, String oldPassword, String newPassword) {
+        if (StringUtils.isBlank(oldPassword) || StringUtils.isBlank(newPassword)) {
+            return false;
+        }
+        if (!checkPassword(oldPassword, user.getPassword())) {
+            return false;
+        }
+        user.setPassword(hashPassword(newPassword));
+        return super.saveEntity(user);
     }
 
     public int countUsers() {

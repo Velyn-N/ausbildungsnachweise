@@ -11,6 +11,9 @@
             Neuen Benutzer erstellen
           </router-link>
         </div>
+        <div v-if="apiUserStore.isLoggedIn()" class="q-mr-md">
+          <q-btn icon="fas fa-key" @click="pwChangeDialogOpen = true" />
+        </div>
         <div v-if="apiUserStore.apiUser.email.length > 0">
           Logged in as {{ apiUserStore.apiUser.email }}. <a class="link" @click="logout">Logout?</a>
         </div>
@@ -70,6 +73,53 @@
       </form>
     </q-card>
   </q-dialog>
+
+  <q-dialog v-model="pwChangeDialogOpen">
+    <q-card style="min-width: 30vw;">
+      <form onsubmit="return false">
+        <q-card-section class="text-center">
+          <h4>Passwort ändern</h4>
+        </q-card-section>
+        <q-card-section class="text-center">
+          <div class="column">
+            <q-input v-model="oldPw"
+                     :type="showOldPw ? 'text' : 'password'"
+                     label="Altes Passwort"
+                     name="old-password">
+              <template v-slot:append>
+                <q-icon :name="showOldPw ? 'visibility' : 'visibility_off'"
+                        class="cursor-pointer"
+                        @click="showOldPw = !showOldPw"/>
+              </template>
+            </q-input>
+            <q-input v-model="newPw"
+                     :type="showNewPw ? 'text' : 'password'"
+                     label="Neues Passwort"
+                     name="new-password">
+              <template v-slot:append>
+                <q-icon :name="showNewPw ? 'visibility' : 'visibility_off'"
+                        class="cursor-pointer"
+                        @click="showNewPw = !showNewPw"/>
+              </template>
+            </q-input>
+            <q-input v-model="newPwRepeat"
+                     :type="showNewPwRepeat ? 'text' : 'password'"
+                     label="Neues Passwort (Wiederholen)"
+                     name="repeat-new-password">
+              <template v-slot:append>
+                <q-icon :name="showNewPwRepeat ? 'visibility' : 'visibility_off'"
+                        class="cursor-pointer"
+                        @click="showNewPwRepeat = !showNewPwRepeat"/>
+              </template>
+            </q-input>
+          </div>
+        </q-card-section>
+        <q-card-section class="text-center">
+          <q-btn type="submit" @click="updatePassword" label="Passwort ändern" />
+        </q-card-section>
+      </form>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup>
@@ -110,6 +160,33 @@ const userCount = ref(-1)
 api.get("/rest/user/count").then(resp => {
   userCount.value = resp.data
 })
+
+
+
+const pwChangeDialogOpen = ref(false)
+const oldPw = ref()
+const showOldPw = ref(false)
+const newPw = ref()
+const showNewPw = ref(false)
+const newPwRepeat = ref()
+const showNewPwRepeat = ref(false)
+
+function updatePassword() {
+  if (newPw.value !== newPwRepeat.value) {
+    $q.notify("Die Passwörter müssen übereinstimmen.")
+    return
+  }
+  api.post("rest/user/change-password", {oldPassword: oldPw, newPassword: newPw}).then(resp => {
+    if (resp.data) {
+      $q.notify("Dein Passwort wurde erfolgreich geändert.")
+      pwChangeDialogOpen.value = false
+    } else {
+      $q.notify("Das Passwort konnte nicht geändert werden.")
+    }
+  }).catch(err => {
+    $q.notify("Das Passwort konnte nicht geändert werden: " + err)
+  })
+}
 </script>
 
 <style>
