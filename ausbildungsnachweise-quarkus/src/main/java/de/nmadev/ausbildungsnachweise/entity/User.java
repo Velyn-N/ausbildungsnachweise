@@ -20,6 +20,42 @@ public class User implements Serializable, JsonEntity {
 	private boolean isAusbilder = false;
 	private boolean isAdmin = false;
 
+	public boolean isAzubi() {
+		return isAzubi;
+	}
+
+	public boolean isAusbilder() {
+		return isAusbilder;
+	}
+
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+
+	public boolean getIsAzubi() {
+		return isAzubi;
+	}
+
+	public void setIsAzubi(boolean azubi) {
+		isAzubi = azubi;
+	}
+
+	public boolean getIsAusbilder() {
+		return isAusbilder;
+	}
+
+	public void setIsAusbilder(boolean ausbilder) {
+		isAusbilder = ausbilder;
+	}
+
+	public boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setIsAdmin(boolean admin) {
+		isAdmin = admin;
+	}
+
 	@Override
 	public boolean isValid() {
 		return StringUtils.isNotBlank(email)

@@ -56,7 +56,7 @@ public class UserRest {
     public boolean createNewUser(User user) {
         if (userDao.countUsers() == 0) {
             log.info("Erstelle initialen Admin-Nutzer...");
-            user.setAdmin(true);
+            user.setIsAdmin(true);
             return userDao.createUser(user);
         } else if (requestUser.getUser().isAdmin()) {
             log.info("Erstelle Nutzer...");
