@@ -5,7 +5,7 @@
         Go Home
       </router-link>
     </q-card-section>
-    <div v-if="!finished && apiUser.isLoggedIn()">
+    <div v-if="!finished && (apiUser.isLoggedIn() || userCount === 0)">
       <q-card-section>
         <h6>Anlegen eines neuen Benutzers</h6>
       </q-card-section>
