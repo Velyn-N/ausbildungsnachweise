@@ -71,6 +71,9 @@ public class UserRest {
     @Path("/change-password")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updatePassword(PasswordPair passwordPair) {
+        if (requestUser.getUser() == null) {
+            return Response.status(Response.Status.FORBIDDEN).entity("Du musst eingeloggt sein.").build();
+        }
         boolean success = userDao.updatePassword(requestUser.getUser(), passwordPair.oldPassword, passwordPair.newPassword);
         return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST)
                 .entity(success)

@@ -176,7 +176,7 @@ function updatePassword() {
     $q.notify("Die Passwörter müssen übereinstimmen.")
     return
   }
-  api.post("rest/user/change-password", {oldPassword: oldPw, newPassword: newPw}).then(resp => {
+  api.post("rest/user/change-password", {oldPassword: oldPw.value, newPassword: newPw.value}).then(resp => {
     if (resp.data) {
       $q.notify("Dein Passwort wurde erfolgreich geändert.")
       pwChangeDialogOpen.value = false
