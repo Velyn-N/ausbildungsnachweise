@@ -47,6 +47,7 @@ public class UserDao extends FileDao<User> {
         if (user == null) {
             return false;
         }
+        user.setId(null);
         user.setPassword(hashPassword(user.getPassword()));
         boolean success = super.saveEntity(user);
         if (success) {
